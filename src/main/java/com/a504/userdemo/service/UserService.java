@@ -20,7 +20,7 @@ public class UserService {
     @Transactional
     public Long save(UserRequestDto userDto) {
         userJpaRepo.save(userDto.toEntity());
-        return userJpaRepo.findByName(userDto.getEmail()).getUserId();
+        return userJpaRepo.findByEmail(userDto.getEmail()).getUserId();
     }
 
     @Transactional(readOnly = true)
@@ -49,7 +49,7 @@ public class UserService {
     public Long update(Long id, UserRequestDto userRequestDto) {
         User modifiedUser = userJpaRepo.findById(id).orElseThrow(UserNotFoundException::new);
         modifiedUser.setName(userRequestDto.getName());
-        modifiedUser.setEmail(userRequestDto.getName());
+        modifiedUser.setEmail(userRequestDto.getEmail());
         return id;
     }
 
