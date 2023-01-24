@@ -1,5 +1,6 @@
 package com.a504.userdemo.controller.v1;
 
+import com.a504.userdemo.advice.exception.UserNotFoundException;
 import com.a504.userdemo.entity.User;
 import com.a504.userdemo.model.response.CommonResult;
 import com.a504.userdemo.model.response.ListResult;
@@ -25,8 +26,19 @@ public class UserController {
 
     @ApiOperation(value = "회원 단건 검색", notes = "userId로 회원을 조회합니다.")
     @GetMapping("/user/{userId}")
-    public SingleResult<User> findUserByKey(@ApiParam(value = "회원 ID", required = true) @PathVariable Long userId) {
-        return responseService.getSingleResult(userJpaRepo.findById(userId).orElse(null));
+    public SingleResult<User> findUserByKey
+            (@ApiParam(value = "회원 ID", required = true) @PathVariable Long userId) {
+        return responseService.getSingleResult(userJpaRepo.findById(userId).orElseThrow(UserNotFoundException::new));
+    }
+
+    @ApiOperation(value = "회원 단건 검색 (이메일)", notes = "이메일로 회원을 조회합니다.")
+    @GetMapping("/user/email/{email}")
+    public SingleResult<User> findUserByEmail
+            (@ApiParam(value = "회원 이메일", required = true) @PathVariable String email) {
+        User user = userJpaRepo.findByEmail(email);
+        if(user == null) throw new UserNotFoundException();
+        else return responseService
+                .getSingleResult(user);
     }
 
     @ApiOperation(value = "회원 목록 조회", notes = "모든 회원을 조회합니다.")
