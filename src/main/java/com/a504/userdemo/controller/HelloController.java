@@ -1,4 +1,4 @@
-package com.a504.userdemo.hello;
+package com.a504.userdemo.controller;
 
 import lombok.Getter;
 import lombok.Setter;
