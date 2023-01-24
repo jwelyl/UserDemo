@@ -17,3 +17,6 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  messages:
+    basename: i18n/exception
+    encoding: UTF-8
