@@ -46,12 +46,11 @@ public class UserService {
     }
 
     @Transactional
-    public UserRequestDto update(Long id, UserRequestDto userRequestDto) {
+    public Long update(Long id, UserRequestDto userRequestDto) {
         User modifiedUser = userJpaRepo.findById(id).orElseThrow(UserNotFoundException::new);
-        return UserRequestDto.builder()
-                .name(modifiedUser.getName())
-                .email(modifiedUser.getEmail())
-                .build();
+        modifiedUser.setName(userRequestDto.getName());
+        modifiedUser.setEmail(userRequestDto.getName());
+        return id;
     }
 
     @Transactional
