@@ -1,12 +1,15 @@
 package com.a504.userdemo.controller.v1;
 
 import com.a504.userdemo.advice.exception.UserNotFoundException;
+import com.a504.userdemo.dto.UserRequestDto;
+import com.a504.userdemo.dto.UserResponseDto;
 import com.a504.userdemo.entity.User;
 import com.a504.userdemo.model.response.CommonResult;
 import com.a504.userdemo.model.response.ListResult;
 import com.a504.userdemo.model.response.SingleResult;
 import com.a504.userdemo.repository.UserJpaRepo;
 import com.a504.userdemo.service.ResponseService;
+import com.a504.userdemo.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -21,50 +24,46 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1")
 public class UserController {
-    private final UserJpaRepo userJpaRepo;
+    private final UserService userService;
     private final ResponseService responseService;
 
     @ApiOperation(value = "회원 단건 검색", notes = "userId로 회원을 조회합니다.")
     @GetMapping("/user/{userId}")
-    public SingleResult<User> findUserByKey
+    public SingleResult<UserResponseDto> findUserById
             (@ApiParam(value = "회원 ID", required = true) @PathVariable Long userId) {
-        return responseService.getSingleResult(userJpaRepo.findById(userId).orElseThrow(UserNotFoundException::new));
+        return responseService.getSingleResult(userService.findById(userId));
     }
 
     @ApiOperation(value = "회원 단건 검색 (이메일)", notes = "이메일로 회원을 조회합니다.")
     @GetMapping("/user/email/{email}")
-    public SingleResult<User> findUserByEmail
+    public SingleResult<UserResponseDto> findUserByEmail
             (@ApiParam(value = "회원 이메일", required = true) @PathVariable String email) {
-        User user = userJpaRepo.findByEmail(email);
-        if(user == null) throw new UserNotFoundException();
-        else return responseService
-                .getSingleResult(user);
+        return responseService.getSingleResult(userService.findByEmail(email));
     }
 
     @ApiOperation(value = "회원 목록 조회", notes = "모든 회원을 조회합니다.")
     @GetMapping("/users")
-    public ListResult<User> findAllUser() {
-        return responseService.getListResult(userJpaRepo.findAll());
+    public ListResult<UserResponseDto> findAllUser() {
+        return responseService.getListResult(userService.findAllUser());
     }
 
     @ApiOperation(value = "회원 등록", notes = "회원을 등록합니다.")
     @PostMapping("/user")
-    public SingleResult<User> save(@ApiParam(value = "회원 이메일", required = true) @RequestParam String email,
+    public SingleResult<Long> save(@ApiParam(value = "회원 이메일", required = true) @RequestParam String email,
                                    @ApiParam(value = "회원 이름", required = true) @RequestParam String name) {
-        User user = User.builder()
+        UserRequestDto user = UserRequestDto.builder()
                 .email(email)
                 .name(name)
                 .build();
-        return responseService.getSingleResult(userJpaRepo.save(user));
+        return responseService.getSingleResult(userService.save(user));
     }
 
     @ApiOperation(value = "회원 수정", notes = "회원 정보를 수정합니다.")
     @PutMapping("/user")
-    public SingleResult<User> modify(@ApiParam(value = "회원 아이디", required = true) @RequestParam Long userId,
+    public SingleResult<Long> modify(@ApiParam(value = "회원 아이디", required = true) @RequestParam Long userId,
                                      @ApiParam(value = "회원 이메일", required = true) @RequestParam String email,
                                      @ApiParam(value = "회원 이름", required = true) @RequestParam String name) {
-        User user = User.builder()
-                .userId(userId)
+        UserRequestDto user = UserRequestDto.builder()
                 .email(email)
                 .name(name)
                 .build();
@@ -73,13 +72,13 @@ public class UserController {
 //        user.setEmail(email);
 //        user.setName(name);
 
-        return responseService.getSingleResult(userJpaRepo.save(user));
+        return responseService.getSingleResult(userService.update(userId, user));
     }
 
     @ApiOperation(value = "회원 삭제", notes = "회원을 삭제합니다.")
     @DeleteMapping("/user/{userId}")
     public CommonResult delete(@ApiParam(value = "회원 아이디", required = true) @PathVariable Long userId) {
-        userJpaRepo.deleteById(userId);
+        userService.delete(userId);
         return responseService.getSuccessResult();
     }
 }
