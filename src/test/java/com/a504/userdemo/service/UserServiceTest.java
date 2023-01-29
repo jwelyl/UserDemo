@@ -3,6 +3,7 @@ package com.a504.userdemo.service;
 import com.a504.userdemo.advice.exception.UserNotFoundException;
 import com.a504.userdemo.dto.UserRequestDto;
 import com.a504.userdemo.dto.UserResponseDto;
+import com.a504.userdemo.entity.user.Role;
 import com.a504.userdemo.entity.user.User;
 import com.a504.userdemo.repository.UserJpaRepo;
 import org.assertj.core.api.Assertions;
@@ -37,6 +38,7 @@ public class UserServiceTest {
         UserRequestDto userA = UserRequestDto.builder()
                 .name("허재성")
                 .email("cork2586@naver.com")
+                .role(Role.USER)
                 .build();
         Long saveId = userService.save(userA);
 
@@ -46,6 +48,9 @@ public class UserServiceTest {
         //  then
         Assertions.assertThat(userB.getName()).isEqualTo(userA.getName());
         Assertions.assertThat(userB.getEmail()).isEqualTo(userA.getEmail());
+        Assertions.assertThat(
+                        userService.findById(saveId).getEmail())
+                .isEqualTo(userJpaRepo.findById(saveId).get().getEmail());
     }
 
     @Test
@@ -55,6 +60,7 @@ public class UserServiceTest {
         UserRequestDto userA = UserRequestDto.builder()
                 .name("허재성")
                 .email("cork2586@naver.com")
+                .role(Role.USER)
                 .build();
         Long id = userService.save(userA);
 
@@ -73,11 +79,13 @@ public class UserServiceTest {
         UserRequestDto userA = UserRequestDto.builder()
                 .name("허재성")
                 .email("cork2586@naver.com")
+                .role(Role.USER)
                 .build();
         userService.save(userA);
         UserRequestDto userB = UserRequestDto.builder()
                 .name("jwelyl")
                 .email("koreii@naver.com")
+                .role(Role.USER)
                 .build();
         userService.save(userB);
 
@@ -95,12 +103,14 @@ public class UserServiceTest {
         UserRequestDto userA = UserRequestDto.builder()
                 .name("허재성")
                 .email("cork2586@naver.com")
+                .role(Role.USER)
                 .build();
         Long id = userService.save(userA);
 
         UserRequestDto userB = UserRequestDto.builder()
                 .name("허줴릴")
                 .email("cork2586@naver.com")
+                .role(Role.USER)
                 .build();
         //  when
         userService.update(id, userB);
@@ -116,6 +126,7 @@ public class UserServiceTest {
         UserRequestDto userA = UserRequestDto.builder()
                 .name("허재성")
                 .email("cork2586@naver.com")
+                .role(Role.USER)
                 .build();
         Long saveId = userService.save(userA);
 
@@ -133,6 +144,7 @@ public class UserServiceTest {
         userJpaRepo.save(User.builder()
                 .name("허재성")
                 .email("cork2586@naver.com")
+                .role(Role.USER)
                 .build());
 
         //  when
@@ -145,7 +157,6 @@ public class UserServiceTest {
 
         Assertions.assertThat(user.getCreatedDate()).isAfter(now);
         Assertions.assertThat(user.getModifiedDate()).isAfter(now);
-
 
 
     }

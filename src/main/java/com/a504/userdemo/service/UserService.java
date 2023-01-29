@@ -19,8 +19,8 @@ public class UserService {
 
     @Transactional
     public Long save(UserRequestDto userDto) {
-        userJpaRepo.save(userDto.toEntity());
-        return userJpaRepo.findByEmail(userDto.getEmail()).getUserId();
+        User saved = userJpaRepo.save(userDto.toEntity());
+        return saved.getUserId();
     }
 
     @Transactional(readOnly = true)
@@ -32,9 +32,9 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserResponseDto findByEmail(String email) {
-        User user = userJpaRepo.findByEmail(email);
-        if(user == null) throw new UserNotFoundException();
-        else return new UserResponseDto(user);
+        User user = userJpaRepo.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+        return new UserResponseDto(user);
     }
 
     @Transactional(readOnly = true)
