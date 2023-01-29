@@ -1,6 +1,6 @@
 package com.a504.userdemo.repository;
 
-import com.a504.userdemo.entity.User;
+import com.a504.userdemo.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserJpaRepo extends JpaRepository<User, Long> {

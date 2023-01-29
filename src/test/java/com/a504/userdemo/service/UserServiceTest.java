@@ -3,6 +3,7 @@ package com.a504.userdemo.service;
 import com.a504.userdemo.advice.exception.UserNotFoundException;
 import com.a504.userdemo.dto.UserRequestDto;
 import com.a504.userdemo.dto.UserResponseDto;
+import com.a504.userdemo.entity.user.User;
 import com.a504.userdemo.repository.UserJpaRepo;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -122,5 +124,29 @@ public class UserServiceTest {
 
         //  then
         org.junit.jupiter.api.Assertions.assertThrows(UserNotFoundException.class, () -> userService.findById(saveId));
+    }
+
+    @Test
+    public void BaseTimeEntity_등록() throws Exception {
+        //  given
+        LocalDateTime now = LocalDateTime.of(2023, 1, 29, 17, 4, 30);
+        userJpaRepo.save(User.builder()
+                .name("허재성")
+                .email("cork2586@naver.com")
+                .build());
+
+        //  when
+        List<User> users = userJpaRepo.findAll();
+
+        //  then
+        User user = users.get(0);
+
+        System.out.println(">>>>>>>>>>>> createDate = " + user.getCreatedDate() + ", modifiedDate = " + user.getModifiedDate());
+
+        Assertions.assertThat(user.getCreatedDate()).isAfter(now);
+        Assertions.assertThat(user.getModifiedDate()).isAfter(now);
+
+
+
     }
 }

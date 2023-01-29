@@ -1,5 +1,6 @@
-package com.a504.userdemo.entity;
+package com.a504.userdemo.entity.user;
 
+import com.a504.userdemo.entity.BaseTimeEntity;
 import lombok.*;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user")
-public class User {
+public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;

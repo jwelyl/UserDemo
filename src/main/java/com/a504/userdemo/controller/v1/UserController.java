@@ -1,23 +1,17 @@
 package com.a504.userdemo.controller.v1;
 
-import com.a504.userdemo.advice.exception.UserNotFoundException;
 import com.a504.userdemo.dto.UserRequestDto;
 import com.a504.userdemo.dto.UserResponseDto;
-import com.a504.userdemo.entity.User;
 import com.a504.userdemo.model.response.CommonResult;
 import com.a504.userdemo.model.response.ListResult;
 import com.a504.userdemo.model.response.SingleResult;
-import com.a504.userdemo.repository.UserJpaRepo;
 import com.a504.userdemo.service.ResponseService;
 import com.a504.userdemo.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Api(tags = {"1. User"})
 @RequiredArgsConstructor
