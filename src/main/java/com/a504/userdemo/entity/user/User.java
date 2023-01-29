@@ -23,4 +23,12 @@ public class User extends BaseTimeEntity {
 
     @Column(nullable = false, length = 100)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
 }
