@@ -37,8 +37,8 @@ public class UserServiceTest {
         //  given
         UserRequestDto userA = UserRequestDto.builder()
                 .name("허재성")
+                .nickName("허줴릴")
                 .email("cork2586@naver.com")
-                .role(Role.USER)
                 .build();
         Long saveId = userService.save(userA);
 
@@ -59,8 +59,8 @@ public class UserServiceTest {
         //  given
         UserRequestDto userA = UserRequestDto.builder()
                 .name("허재성")
+                .nickName("허줴릴")
                 .email("cork2586@naver.com")
-                .role(Role.USER)
                 .build();
         Long id = userService.save(userA);
 
@@ -78,14 +78,14 @@ public class UserServiceTest {
         //  given
         UserRequestDto userA = UserRequestDto.builder()
                 .name("허재성")
+                .nickName("허줴릴")
                 .email("cork2586@naver.com")
-                .role(Role.USER)
                 .build();
         userService.save(userA);
         UserRequestDto userB = UserRequestDto.builder()
                 .name("jwelyl")
+                .nickName("코레이")
                 .email("koreii@naver.com")
-                .role(Role.USER)
                 .build();
         userService.save(userB);
 
@@ -102,15 +102,15 @@ public class UserServiceTest {
         //  given
         UserRequestDto userA = UserRequestDto.builder()
                 .name("허재성")
+                .nickName("코레일")
                 .email("cork2586@naver.com")
-                .role(Role.USER)
                 .build();
         Long id = userService.save(userA);
 
         UserRequestDto userB = UserRequestDto.builder()
                 .name("허줴릴")
+                .nickName("코레이")
                 .email("cork2586@naver.com")
-                .role(Role.USER)
                 .build();
         //  when
         userService.update(id, userB);
@@ -125,8 +125,8 @@ public class UserServiceTest {
         //  given
         UserRequestDto userA = UserRequestDto.builder()
                 .name("허재성")
+                .nickName("코레이")
                 .email("cork2586@naver.com")
-                .role(Role.USER)
                 .build();
         Long saveId = userService.save(userA);
 
@@ -143,8 +143,8 @@ public class UserServiceTest {
         LocalDateTime now = LocalDateTime.of(2023, 1, 29, 17, 4, 30);
         userJpaRepo.save(User.builder()
                 .name("허재성")
+                .nickName("허줴릴")
                 .email("cork2586@naver.com")
-                .role(Role.USER)
                 .build());
 
         //  when

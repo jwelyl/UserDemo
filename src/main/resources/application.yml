@@ -21,4 +21,4 @@ spring:
     basename: i18n/exception
     encoding: UTF-8
   profiles:
-    include: oauth
+    include: jwt

@@ -13,20 +13,20 @@ import lombok.Setter;
 public class UserRequestDto {
     private String email;
     private String name;
-    private Role role;
+    private String nickName;
 
     @Builder
-    public UserRequestDto(String email, String name, Role role) {
+    public UserRequestDto(String email, String name, String nickName) {
         this.email = email;
         this.name = name;
-        this.role = role;
+        this.nickName = nickName;
     }
 
     public User toEntity() {
         return User.builder()
                 .email(email)
                 .name(name)
-                .role(role)
+                .nickName(nickName)
                 .build();
     }
 
