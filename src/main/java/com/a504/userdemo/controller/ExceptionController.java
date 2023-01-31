@@ -16,8 +16,9 @@ public class ExceptionController {
     public CommonResult entryPointException() {
         throw new CAuthenticationEntryPointException();
     }
-//    @GetMapping("/accessDenied")
-//    public CommonResult accessDeniedException() {
-//        throw new AccessDeniedException("");
-//    }
+    @GetMapping("/accessDenied")
+    public CommonResult accessDeniedException() {
+        System.out.println("AccessDeniedException!!!!!!!!!");
+        throw new AccessDeniedException("");
+    }
 }

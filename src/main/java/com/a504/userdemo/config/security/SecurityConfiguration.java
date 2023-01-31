@@ -34,9 +34,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/*/login", "/*/signup").permitAll()
                 .antMatchers(HttpMethod.GET, "/exception/**").permitAll()
+                .antMatchers("/*/users").hasRole("ADMIN")
                 .anyRequest().hasRole("USER")
                 .and().exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-//                .and().exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
+                .and().exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and().addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
     }
 
