@@ -1,7 +1,7 @@
 package com.a504.userdemo.service;
 
-import com.a504.userdemo.advice.exception.EmailLoginFailedException;
-import com.a504.userdemo.advice.exception.EmailSignupFailedException;
+import com.a504.userdemo.advice.exception.EmailLoginFailedCException;
+import com.a504.userdemo.advice.exception.EmailSignupFailedCException;
 import com.a504.userdemo.advice.exception.UserNotFoundException;
 import com.a504.userdemo.dto.UserLoginResponseDto;
 import com.a504.userdemo.dto.UserRequestDto;
@@ -69,10 +69,10 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserLoginResponseDto login(String email, String password) {
-        User user = userJpaRepo.findByEmail(email).orElseThrow(EmailLoginFailedException::new);
+        User user = userJpaRepo.findByEmail(email).orElseThrow(EmailLoginFailedCException::new);
 
         if(!passwordEncoder.matches(password, user.getPassword()))
-            throw new EmailLoginFailedException();
+            throw new EmailLoginFailedCException();
         return new UserLoginResponseDto(user);
     }
 
@@ -82,6 +82,6 @@ public class UserService {
         if(user == null)
             return userJpaRepo.save(userSignupDto.toEntity()).getUserId();
         else
-            throw new EmailSignupFailedException();
+            throw new EmailSignupFailedCException();
     }
 }

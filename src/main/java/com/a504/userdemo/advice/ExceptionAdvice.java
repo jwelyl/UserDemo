@@ -1,7 +1,7 @@
 package com.a504.userdemo.advice;
 
-import com.a504.userdemo.advice.exception.EmailLoginFailedException;
-import com.a504.userdemo.advice.exception.EmailSignupFailedException;
+import com.a504.userdemo.advice.exception.EmailLoginFailedCException;
+import com.a504.userdemo.advice.exception.EmailSignupFailedCException;
 import com.a504.userdemo.advice.exception.UserNotFoundException;
 import com.a504.userdemo.model.response.CommonResult;
 import com.a504.userdemo.service.ResponseService;
@@ -46,9 +46,9 @@ public class ExceptionAdvice {
     /**
      * 유저 이메일 로그인 실패 시 발생시키는 에외
      */
-    @ExceptionHandler(EmailLoginFailedException.class)
+    @ExceptionHandler(EmailLoginFailedCException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected CommonResult emailLoginFailedException(HttpServletRequest request, EmailLoginFailedException e) {
+    protected CommonResult emailLoginFailedException(HttpServletRequest request, EmailLoginFailedCException e) {
         return responseService.getFailResult(Integer.parseInt(getMessage("emailLgoinFailed.code")),
                 getMessage("emailLoginFailed.msg"));
     }
@@ -56,8 +56,9 @@ public class ExceptionAdvice {
     /**
      * 회원 가입 시 이미 로그인된 이메일인 경우 발생시키는 예외
      */
+    @ExceptionHandler(EmailSignupFailedCException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected CommonResult emailSignupFailedExdeption(HttpServletRequest request, EmailSignupFailedException e) {
+    protected CommonResult emailSignupFailedExdeption(HttpServletRequest request, EmailSignupFailedCException e) {
         return responseService.getFailResult(Integer.parseInt(getMessage("emailSignupFailed")), getMessage("emailSignupFailed.msg"));
     }
 
