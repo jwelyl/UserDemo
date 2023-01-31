@@ -1,7 +1,6 @@
 package com.a504.userdemo.config;
 
 import net.rakugakibox.util.YamlResourceBundle;
-import org.apache.tomcat.util.descriptor.LocalResolver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -19,22 +18,20 @@ import java.util.ResourceBundle;
 
 @Configuration
 public class MessageConfiguration implements WebMvcConfigurer {
+
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(Locale.KOREA);
+        slr.setDefaultLocale(Locale.KOREAN);
         return slr;
     }
 
-    /**
-     *
-     * spring에서 공식적으로 국제화 처리를 위해 제공하는 인터셉터
-     * "lang"이라는 이름을 갖는 쿼리 파라미터의 값을 바탕으로 언어 정보를 변경
-     */
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
         lci.setParamName("lang");
+
+        System.out.println("lci.getParamName() = " + lci.getParamName());
         return lci;
     }
 
@@ -45,14 +42,17 @@ public class MessageConfiguration implements WebMvcConfigurer {
 
     @Bean
     public MessageSource messageSource(
-            @Value("${spring.messages.basename") String basename,
-            @Value("${spring.messages.encoding") String encoding) {
+            @Value("${spring.messages.basename}") String basename,
+            @Value("${spring.messages.encoding}") String encoding) {
+        System.out.println("basename = " + basename);
+        System.out.println("encoding = " + encoding);
+
         YamlMessageSource ms = new YamlMessageSource();
         ms.setBasename(basename);
         ms.setDefaultEncoding(encoding);
         ms.setAlwaysUseMessageFormat(true);
         ms.setUseCodeAsDefaultMessage(true);
-        ms.setAlwaysUseMessageFormat(true);
+        ms.setFallbackToSystemLocale(true);
         return ms;
     }
 

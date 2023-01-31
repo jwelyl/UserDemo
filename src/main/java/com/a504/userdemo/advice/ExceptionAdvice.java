@@ -1,5 +1,6 @@
 package com.a504.userdemo.advice;
 
+import com.a504.userdemo.advice.exception.CAuthenticationEntryPointException;
 import com.a504.userdemo.advice.exception.EmailLoginFailedCException;
 import com.a504.userdemo.advice.exception.EmailSignupFailedCException;
 import com.a504.userdemo.advice.exception.UserNotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import java.nio.file.AccessDeniedException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -58,7 +60,7 @@ public class ExceptionAdvice {
      */
     @ExceptionHandler(EmailSignupFailedCException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected CommonResult emailSignupFailedExdeption(HttpServletRequest request, EmailSignupFailedCException e) {
+    protected CommonResult emailSignupFailedException(HttpServletRequest request, EmailSignupFailedCException e) {
         return responseService.getFailResult(Integer.parseInt(getMessage("emailSignupFailed")), getMessage("emailSignupFailed.msg"));
     }
 
@@ -68,15 +70,41 @@ public class ExceptionAdvice {
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected CommonResult userNotFoundException(HttpServletRequest request, UserNotFoundException e) {
+        System.out.println("없는 유저 찾기");
+        System.out.println("getMessage = " + getMessage("userNotFound.code"));
+
         return responseService.getFailResult
                 (Integer.parseInt(getMessage("userNotFound.code")), getMessage("userNotFound.msg"));
     }
+
+    /**
+     *  전달한 Jwt이 정상적이지 않은 경우 발생시키는 예외
+     */
+    @ExceptionHandler(CAuthenticationEntryPointException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected CommonResult authenticationEntrypointException(HttpServletRequest request, CAuthenticationEntryPointException e) {
+        System.out.println("잘못된 토큰 전달");
+
+        System.out.println("getMessage = " + getMessage("authenticationEntrypoint.code"));
+
+        return responseService.getFailResult(Integer.parseInt(getMessage("authenticationEntrypoint.code")), getMessage("authenticationEntrypoint.msg"));
+    }
+
+//    /**
+//     *  권한이 없는 리소스를 요청한 경우 발생시키는 예외
+//     */
+//    @ExceptionHandler(AccessDeniedException.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    protected CommonResult accessDeniedException(HttpServletRequest request, AccessDeniedException e) {
+//        return responseService.getFailResult(Integer.parseInt(getMessage("accessDenied.code")), getMessage("accessDenied.msg"));
+//    }
 
     private String getMessage(String code) {
         return getMessage(code, null);
     }
 
     private String getMessage(String code, Object[] args) {
+        System.out.println("코드!! = " + code);
         return messageSource.getMessage(code, args, LocaleContextHolder.getLocale());
     }
 }
