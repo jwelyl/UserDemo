@@ -3,7 +3,6 @@ package com.a504.userdemo.service;
 import com.a504.userdemo.advice.exception.UserNotFoundException;
 import com.a504.userdemo.dto.UserRequestDto;
 import com.a504.userdemo.dto.UserResponseDto;
-import com.a504.userdemo.entity.user.Role;
 import com.a504.userdemo.entity.user.User;
 import com.a504.userdemo.repository.UserJpaRepo;
 import org.assertj.core.api.Assertions;

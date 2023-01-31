@@ -1,6 +1,5 @@
 package com.a504.userdemo.dto;
 
-import com.a504.userdemo.entity.user.Role;
 import com.a504.userdemo.entity.user.User;
 import lombok.Builder;
 import lombok.Getter;
