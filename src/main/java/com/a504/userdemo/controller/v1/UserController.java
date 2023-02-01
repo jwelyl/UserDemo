@@ -1,7 +1,7 @@
 package com.a504.userdemo.controller.v1;
 
-import com.a504.userdemo.dto.UserRequestDto;
-import com.a504.userdemo.dto.UserResponseDto;
+import com.a504.userdemo.dto.user.UserRequestDto;
+import com.a504.userdemo.dto.user.UserResponseDto;
 import com.a504.userdemo.model.response.CommonResult;
 import com.a504.userdemo.model.response.ListResult;
 import com.a504.userdemo.model.response.SingleResult;

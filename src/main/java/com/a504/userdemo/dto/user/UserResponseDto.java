@@ -1,4 +1,4 @@
-package com.a504.userdemo.dto;
+package com.a504.userdemo.dto.user;
 
 import com.a504.userdemo.entity.user.User;
 import lombok.Getter;

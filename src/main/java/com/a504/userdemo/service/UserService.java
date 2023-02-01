@@ -1,12 +1,12 @@
 package com.a504.userdemo.service;
 
-import com.a504.userdemo.advice.exception.EmailLoginFailedCException;
-import com.a504.userdemo.advice.exception.EmailSignupFailedCException;
-import com.a504.userdemo.advice.exception.UserNotFoundException;
-import com.a504.userdemo.dto.UserLoginResponseDto;
-import com.a504.userdemo.dto.UserRequestDto;
-import com.a504.userdemo.dto.UserResponseDto;
-import com.a504.userdemo.dto.UserSignupRequestDto;
+import com.a504.userdemo.advice.exception.CEmailLoginFailedCException;
+import com.a504.userdemo.advice.exception.CEmailSignupFailedCException;
+import com.a504.userdemo.advice.exception.CUserNotFoundException;
+import com.a504.userdemo.dto.user.UserLoginResponseDto;
+import com.a504.userdemo.dto.user.UserRequestDto;
+import com.a504.userdemo.dto.user.UserResponseDto;
+import com.a504.userdemo.dto.user.UserSignupRequestDto;
 import com.a504.userdemo.entity.user.User;
 import com.a504.userdemo.repository.UserJpaRepo;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UserService {
     private UserJpaRepo userJpaRepo;
-    private PasswordEncoder passwordEncoder;
 
     @Transactional
     public Long save(UserRequestDto userDto) {
@@ -34,14 +33,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserResponseDto findById(Long id) {
         User user = userJpaRepo.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(CUserNotFoundException::new);
         return new UserResponseDto(user);
     }
 
     @Transactional(readOnly = true)
     public UserResponseDto findByEmail(String email) {
         User user = userJpaRepo.findByEmail(email)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(CUserNotFoundException::new);
         return new UserResponseDto(user);
     }
 
@@ -55,7 +54,7 @@ public class UserService {
 
     @Transactional
     public Long update(Long id, UserRequestDto userRequestDto) {
-        User modifiedUser = userJpaRepo.findById(id).orElseThrow(UserNotFoundException::new);
+        User modifiedUser = userJpaRepo.findById(id).orElseThrow(CUserNotFoundException::new);
         modifiedUser.setName(userRequestDto.getName());
         modifiedUser.setNickName(userRequestDto.getNickName());
         modifiedUser.setEmail(userRequestDto.getEmail());
@@ -65,23 +64,5 @@ public class UserService {
     @Transactional
     public void delete(Long id) {
         userJpaRepo.deleteById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public UserLoginResponseDto login(String email, String password) {
-        User user = userJpaRepo.findByEmail(email).orElseThrow(EmailLoginFailedCException::new);
-
-        if(!passwordEncoder.matches(password, user.getPassword()))
-            throw new EmailLoginFailedCException();
-        return new UserLoginResponseDto(user);
-    }
-
-    @Transactional
-    public Long signup(UserSignupRequestDto userSignupDto) {
-        User user = userJpaRepo.findByEmail(userSignupDto.getEmail()).orElse(null);
-        if(user == null)
-            return userJpaRepo.save(userSignupDto.toEntity()).getUserId();
-        else
-            throw new EmailSignupFailedCException();
     }
 }

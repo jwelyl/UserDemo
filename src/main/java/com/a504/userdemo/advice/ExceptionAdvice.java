@@ -1,9 +1,6 @@
 package com.a504.userdemo.advice;
 
-import com.a504.userdemo.advice.exception.CAuthenticationEntryPointException;
-import com.a504.userdemo.advice.exception.EmailLoginFailedCException;
-import com.a504.userdemo.advice.exception.EmailSignupFailedCException;
-import com.a504.userdemo.advice.exception.UserNotFoundException;
+import com.a504.userdemo.advice.exception.*;
 import com.a504.userdemo.model.response.CommonResult;
 import com.a504.userdemo.service.ResponseService;
 import lombok.RequiredArgsConstructor;
@@ -29,15 +26,6 @@ public class ExceptionAdvice {
     /**
      * default Exception
      */
-//    @ExceptionHandler(Exception.class)
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    protected CommonResult defaultException(HttpServletRequest request, Exception e) {
-//        return responseService.getFailResult();
-//    }
-
-    /**
-     * default Exception
-     */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected CommonResult defaultException(HttpServletRequest request, Exception e) {
@@ -48,11 +36,24 @@ public class ExceptionAdvice {
     }
 
     /**
+     *  유저를 찾지 못했을 때 발생시키는 예외
+     */
+    @ExceptionHandler(CUserNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected CommonResult userNotFoundException(HttpServletRequest request, CUserNotFoundException e) {
+        System.out.println("없는 유저 찾기 오류");
+//        System.out.println("getMessage = " + getMessage("userNotFound.code"));
+
+        return responseService.getFailResult
+                (Integer.parseInt(getMessage("userNotFound.code")), getMessage("userNotFound.msg"));
+    }
+
+    /**
      * 유저 이메일 로그인 실패 시 발생시키는 에외
      */
-    @ExceptionHandler(EmailLoginFailedCException.class)
+    @ExceptionHandler(CEmailLoginFailedCException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected CommonResult emailLoginFailedException(HttpServletRequest request, EmailLoginFailedCException e) {
+    protected CommonResult emailLoginFailedException(HttpServletRequest request, CEmailLoginFailedCException e) {
         System.out.println("이메일 로그인 실패 오류");
         return responseService.getFailResult(Integer.parseInt(getMessage("emailLoginFailed.code")),
                 getMessage("emailLoginFailed.msg"));
@@ -61,24 +62,11 @@ public class ExceptionAdvice {
     /**
      * 회원 가입 시 이미 로그인된 이메일인 경우 발생시키는 예외
      */
-    @ExceptionHandler(EmailSignupFailedCException.class)
+    @ExceptionHandler(CEmailSignupFailedCException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected CommonResult emailSignupFailedException(HttpServletRequest request, EmailSignupFailedCException e) {
+    protected CommonResult emailSignupFailedException(HttpServletRequest request, CEmailSignupFailedCException e) {
         System.out.println("이미 로그인된 로그인 오류");
         return responseService.getFailResult(Integer.parseInt(getMessage("emailSignupFailed")), getMessage("emailSignupFailed.msg"));
-    }
-
-    /**
-     *  유저를 찾지 못했을 때 발생시키는 예외
-     */
-    @ExceptionHandler(UserNotFoundException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected CommonResult userNotFoundException(HttpServletRequest request, UserNotFoundException e) {
-        System.out.println("없는 유저 찾기 오류");
-//        System.out.println("getMessage = " + getMessage("userNotFound.code"));
-
-        return responseService.getFailResult
-                (Integer.parseInt(getMessage("userNotFound.code")), getMessage("userNotFound.msg"));
     }
 
     /**
@@ -101,6 +89,26 @@ public class ExceptionAdvice {
     protected CommonResult accessDeniedException(HttpServletRequest request, AccessDeniedException e) {
         System.out.println("권한이 부족한 오류!");
         return responseService.getFailResult(Integer.parseInt(getMessage("accessDenied.code")), getMessage("accessDenied.msg"));
+    }
+
+    /**
+     *  refresh token 에러시 발생시키는 에러
+     */
+    @ExceptionHandler(CRefreshTokenException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected  CommonResult refreshTokenException(HttpServletRequest request, CRefreshTokenException e) {
+        System.out.println("refresh token 오류");
+        return responseService.getFailResult(Integer.parseInt(getMessage("refreshTokenInValid.code")), getMessage("refreshTokenInValid.msg"));
+    }
+
+    /**
+     *  액세스 토큰 만료시 발생시키는 에러
+     */
+    @ExceptionHandler(CExpiredAccessTokenException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected  CommonResult expiredAccessTokenException(HttpServletRequest request, CExpiredAccessTokenException e) {
+        System.out.println("access token 만료 오류");
+        return responseService.getFailResult(Integer.parseInt(getMessage("expiredAccessToken.code")), getMessage("expiredAccessToken.msg"));
     }
 
     private String getMessage(String code) {

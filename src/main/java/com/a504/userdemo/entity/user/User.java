@@ -62,7 +62,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public String getUsername() {
-        return this.name;
+        return String.valueOf(this.userId);
+//        return this.name;
     }
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
