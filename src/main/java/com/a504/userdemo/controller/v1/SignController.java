@@ -38,6 +38,10 @@ public class SignController {
         @RequestBody UserSignupRequestDto userSignupRequestDto) {
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
+        System.out.println("userSignupRequestDto.getEmail() = " + userSignupRequestDto.getEmail());
+        System.out.println("userSignupRequestDto.getName() = " + userSignupRequestDto.getName());
+        System.out.println("userSignupRequestDto.getNickName() = " + userSignupRequestDto.getNickName());
+
         System.out.println("userSignupRequestDto = " + userSignupRequestDto);
         Long signupId = signService.signup(userSignupRequestDto);
         return responseService.getSingleResult(signupId);

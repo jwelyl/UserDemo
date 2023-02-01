@@ -3,11 +3,14 @@ package com.a504.userdemo.dto.user;
 import com.a504.userdemo.entity.user.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
 
+
 @Getter
+@NoArgsConstructor
 public class UserSignupRequestDto {
     private String email;
     private String password;

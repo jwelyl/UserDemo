@@ -52,6 +52,11 @@ public class MessageConfiguration implements WebMvcConfigurer {
         YamlMessageSource ms = new YamlMessageSource();
         ms.setBasename(basename);
         ms.setDefaultEncoding(encoding);
+
+        System.out.println("******************************************************");
+        System.out.println("ms.getBasenameSet() = " + ms.getBasenameSet());
+        System.out.println("******************************************************");
+
         ms.setAlwaysUseMessageFormat(true);
         ms.setUseCodeAsDefaultMessage(true);
         ms.setFallbackToSystemLocale(true);
